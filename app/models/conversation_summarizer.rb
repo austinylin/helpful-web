@@ -10,7 +10,7 @@ class ConversationSummarizer
   end
 
   def summary
-    @conversation.messages.first.content[0...LENGTH]
+    @conversation.messages.first.try { |m| m.content[0...LENGTH] }
   end
 
 end

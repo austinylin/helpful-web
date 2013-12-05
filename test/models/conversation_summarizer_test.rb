@@ -12,4 +12,9 @@ class ConversationSummarizerTest < ActiveSupport::TestCase
     assert_equal 'Tweet sized summary', summarizer.summary
   end
 
+  test "handles empty conversations" do
+    conversation = build(:conversation)
+    summarizer = ConversationSummarizer.new(conversation)
+    assert_nil summarizer.summary
+  end
 end
