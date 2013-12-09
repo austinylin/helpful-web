@@ -45,7 +45,12 @@ GEM
     builder (3.1.4)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    configatron (2.13.0)
+      yamler (>= 0.1.0)
     connection_pool (1.1.0)
+    cover_me (1.2.0)
+      configatron
+      hashie
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
     curb (0.8.5)
@@ -195,6 +200,7 @@ GEM
     webmock (1.16.0)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
+    yamler (0.1.0)
 
 PLATFORMS
   ruby
@@ -204,6 +210,7 @@ DEPENDENCIES
   analytics-ruby (< 1.0)
   bourbon
   bugsnag
+  cover_me
   curb
   devise (~> 3.1)
   dotenv-rails

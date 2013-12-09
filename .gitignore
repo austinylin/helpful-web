@@ -34,3 +34,7 @@
 /vendor/assets/components
 
 Procfile.dev
+
+# Cover me
+/coverage
+coverage.data

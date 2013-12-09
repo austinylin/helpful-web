@@ -1,3 +1,4 @@
+require 'cover_me'
 ENV["RAILS_ENV"] = "test"
 ENV['ELASTICSEARCH_URL'] = setting_to_nil_to_disable_search_in_test = nil
 

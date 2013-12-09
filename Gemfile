@@ -30,6 +30,7 @@ group :development do
 end
 
 group :test do
+  gem 'cover_me'
   gem 'factory_girl_rails', '~> 4.2.1'
   gem 'minitest-rails', '~> 0.9.2'
   gem 'minitest-reporters'
