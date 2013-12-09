@@ -31,10 +31,11 @@ end
 
 group :test do
   gem 'factory_girl_rails', '~> 4.2.1'
+  gem 'flexmock'
   gem 'minitest-rails', '~> 0.9.2'
   gem 'minitest-reporters'
+  gem 'simplecov'
   gem 'webmock', '~> 1.15'
-  gem "flexmock"
 end
 
 group :development, :test do

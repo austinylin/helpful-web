@@ -34,3 +34,6 @@
 /vendor/assets/components
 
 Procfile.dev
+
+# Simplecov
+/coverage

@@ -1,5 +1,11 @@
 ENV["RAILS_ENV"] = "test"
 ENV['ELASTICSEARCH_URL'] = setting_to_nil_to_disable_search_in_test = nil
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_group "API Controllers", "app/controllers/api"
+  add_group "Serializers", "app/serializers"
+  add_group "Workers", "app/workers"
+end if ENV["COVERAGE"]
 
 require File.expand_path("../../config/environment", __FILE__)
 require "rails/test_help"
