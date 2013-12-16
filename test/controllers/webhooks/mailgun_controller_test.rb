@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'openssl'
 
-describe IncomingEmails::MailgunController do
+describe Webhooks::MailgunController do
   def post_webhook(args = {})
 
     # The mailgun API only uses timestamp and token as the inputs to HMAC
@@ -84,6 +84,12 @@ describe IncomingEmails::MailgunController do
       it "associates the message with the correct account" do
         post_webhook
         assert_equal @account, Messages::Email.last.account
+      end
+
+      it "associates the message with the correct conversation" do
+        conversation = create(:conversation)
+        post_webhook(recipient: conversation.mailbox.to_s)
+        assert_equal conversation, Messages::Email.last.conversation
       end
     end
 

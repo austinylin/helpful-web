@@ -17,10 +17,11 @@ describe(Api::MessagesController, :create) do
   def find_message_from_response(response)
     Message.find(parse_json_response(response)[:id])
   end
-
-
+  
   before do
+    token = flexmock('Mocked Doorkeeper Token', :accessible? => true)
     @controller = Api::MessagesController.new
+    flexmock(@controller, doorkeeper_token: token )
     @account = create(:account)
   end
 
@@ -51,6 +52,17 @@ describe(Api::MessagesController, :create) do
     assert_equal 'chris@example.com', message.person.email
   end
 
+  it 'persists the correct email via a person object' do
+    create_post(@account, email: 'Chris <chris@example.com>')
+    message = find_message_from_response(@response)
+    assert_equal 'chris@example.com', message.person.email
+  end
+
+  it 'persists the correct name from the email via a person object' do
+    create_post(@account, email: 'Chris <chris@example.com>')
+    message = find_message_from_response(@response)
+    assert_equal 'Chris', message.person.name
+  end
 
   # Conversations
 
@@ -74,4 +86,17 @@ describe(Api::MessagesController, :create) do
     assert_equal conversation, message.conversation
   end
 
+  # Mailer
+
+  it 'sends an email if reply from a new person' do
+    conversation = create(:conversation, account: @account)
+    create(:message, conversation: conversation)
+    person = create(:person)
+
+   assert_difference "ActionMailer::Base.deliveries.length" do
+      create_post(@account,
+                  conversation: conversation.number,
+                  email: person.email)
+   end
+  end
 end

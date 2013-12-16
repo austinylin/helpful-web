@@ -1,6 +1,6 @@
 class Api::MessagesController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_user!, except: [:create]
+  doorkeeper_for :all
 
   respond_to :json
 
@@ -17,7 +17,11 @@ class Api::MessagesController < ApplicationController
   def create
     account = Account.where(slug: params.fetch(:account)).first
     conversation = Concierge.new(account, params).find_conversation
-    person = account.people.find_or_create_by(email: params.fetch(:email))
+
+    email = Mail::Address.new params.fetch(:email)
+    person = account.people.find_or_create_by(email: email.address) do |p|
+      p.name = email.display_name
+    end
 
     @message = conversation.messages.new(
       content: params.fetch(:content),
@@ -25,11 +29,6 @@ class Api::MessagesController < ApplicationController
     )
 
     if @message.valid? && @message.save
-
-      recipients = @message.conversation.participants - [@message.person]
-      recipients.each do |recipient|
-        MessageMailer.created(@message.id, recipient.id).deliver
-      end
 
       render :json => @message,
              :status => :created,

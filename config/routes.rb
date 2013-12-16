@@ -1,5 +1,9 @@
 Supportly::Application.routes.draw do
 
+  use_doorkeeper do
+    controllers :applications => 'oauth/applications'
+  end
+
   if Rails.env.development?
     require 'sidekiq/web'
     mount Sidekiq::Web, at: "/sidekiq"
@@ -7,6 +11,7 @@ Supportly::Application.routes.draw do
 
   get '/embed.js' => 'pages#embed', :as => :embed
   get '/styleguide' => 'pages#styleguide', :as => :styleguide
+  get '/docs' => 'pages#docs', :as => :docs
 
   devise_for :users, skip: :registrations
 
@@ -25,16 +30,23 @@ Supportly::Application.routes.draw do
   end
 
   resource :beta_invites, only: [:create]
-  resource :account, only: [:new, :create, :edit]
+  resource :account, only: [:new, :create, :edit, :update]
+  resource :billing, only: [:show] do
+    get :return
+    post :webhook
+  end
 
   resources :messages
 
-  namespace :incoming_emails do
+  namespace :webhooks do
     resources :mailgun, only: :create
   end
 
   namespace :api do
-   match 'messages/create' => 'messages#create', :via => ["get", "post"], :defaults => { :format => 'json' }
+    match 'messages/create' => 'messages#create',
+          :via => ["get", "post"],
+          :defaults => { :format => 'json' }
+
    resources :messages, :defaults => { :format => 'json' }
   end
 

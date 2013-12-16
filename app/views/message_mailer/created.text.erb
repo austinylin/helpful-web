@@ -1,4 +1,13 @@
-You have a new support message
+A new message was added to your support request:
 ===============================================
- 
-<%= @message.content %>
+
+<%= word_wrap(@message.content).gsub(/\n/, "\n>") %>
+Posted <%= time_ago_in_words(@message.created_at) %> ago by <%= nickname(@message.person) %>
+
+Conversation history
+===============================================
+<% (@conversation.messages - [@message]).each do |message| %>
+<%= word_wrap(message.content).gsub(/\n/, "\n>") %>
+Posted <%= time_ago_in_words(message.created_at) %> ago by <%= nickname(message.person) %>
+
+<% end %>
