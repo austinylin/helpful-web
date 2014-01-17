@@ -117,6 +117,7 @@ GEM
     json (1.8.1)
     jwt (0.1.8)
       multi_json (>= 1.5)
+    liquid (2.6.1)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -266,6 +267,7 @@ DEPENDENCIES
   fog (>= 1.19.0)
   friendly_id (~> 5.0)
   jquery-rails
+  liquid
   mail_view (~> 1.0.3)
   minitest-rails (~> 0.9.2)
   minitest-reporters
